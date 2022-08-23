@@ -1,0 +1,8 @@
+boto3
+fastapi
+kafka
+kafka-python
+pymysql
+requests
+sqlalchemy
+uvicorn

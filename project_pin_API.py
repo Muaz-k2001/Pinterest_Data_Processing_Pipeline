@@ -27,8 +27,7 @@ def get_db_row(item: Data):
     data = dict(item)
     json_data = dumps(data).encode('utf-8')
     producer = KafkaProducer(bootstrap_servers='localhost:9092')
-    for _ in range(100):
-        producer.send('mytopic', json_data)
+    producer.send('mytopic', json_data)
     return item
 
 

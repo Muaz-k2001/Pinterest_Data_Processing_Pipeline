@@ -38,7 +38,13 @@ def convert_follower_count_to_int64(df):
         num_str = bad_num.str.replace(r'\D', '000000')
     num = num_str.astype('int64')
     df["follower_count"] = num
-    return num
+
+
+
+def convert_category_to_category(df):
+    bad_cat = df['category']
+    cat = bad_cat.astype('category')
+    df['category'] = cat
 
 
 
@@ -65,6 +71,7 @@ def spark():
     json_dict = convert_to_dict()
     df = pd.DataFrame(json_dict, index=[0])
     convert_follower_count_to_int64(df)
+    convert_category_to_category(df)
     df_spark = session.createDataFrame(df)
     df_spark.show()
 

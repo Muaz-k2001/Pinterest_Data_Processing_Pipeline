@@ -48,6 +48,13 @@ def convert_category_to_category(df):
 
 
 
+def convert_iv_to_category(df):
+    bad_iv = df['is_image_or_video']
+    iv = bad_iv.astype('category')
+    df['is_image_or_video'] = iv
+
+
+
 cfg = (
     pyspark.SparkConf()
     # Setting the master to run locally and with the maximum amount of cpu coresfor multiprocessing.
@@ -72,6 +79,7 @@ def spark():
     df = pd.DataFrame(json_dict, index=[0])
     convert_follower_count_to_int64(df)
     convert_category_to_category(df)
+    convert_iv_to_category(df)
     df_spark = session.createDataFrame(df)
     df_spark.show()
 

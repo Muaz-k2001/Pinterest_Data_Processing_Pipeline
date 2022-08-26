@@ -2,7 +2,9 @@ boto3
 fastapi
 kafka
 kafka-python
+pandas
 pymysql
+pyspark
 requests
 sqlalchemy
 uvicorn

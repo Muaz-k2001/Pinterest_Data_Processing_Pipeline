@@ -27,8 +27,7 @@ def consume():
     consumer = KafkaConsumer('mytopic', group_id='batch', bootstrap_servers=['localhost:9092'])
     a = 0
     for message in consumer:
-        message.value.decode('utf-8')
-        msg = "%s:%d:%d: key=%s value=%s" % (message.topic, message.partition, message.offset, message.key, message.value)
+        msg = message.value.decode('utf-8')
         print(msg)
         msg_list.append(msg)
         a += 1

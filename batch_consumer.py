@@ -31,18 +31,12 @@ def consume():
         print(msg)
         msg_list.append(msg)
         a += 1
-        if a == 3:
+        if a == 10:
             break
         time.sleep(3)
 
 
 def create_json_files():
-    '''Inside the relevant property folder, creates a file 'data.json' containing information obtained for the property
-
-    Args:
-        uid_directory (str): path to current property directory
-        current_property (dict): Dictionary containing keys and values of current property
-    '''
     x = 0
     while x < len(msg_list):
         with open(os.path.join('./raw_data/', f'msg_{x}_data.json'), 'a+') as outfile:

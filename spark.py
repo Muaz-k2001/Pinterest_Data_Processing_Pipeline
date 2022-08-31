@@ -8,6 +8,7 @@ import boto3
 import shutil
 import os
 
+os.environ['PYSPARK_SUBMIT_ARGS']='--packages com.amazonaws:aws-java-sdk-s3:1.12.196,org.apache.hadoop:hadoop-aws:3.3.1,com.datastax.spark:spark-cassandra-connector_2.12:3.2.0 pyspark-shell'
 
 
 def create_downloaded_folder():
@@ -21,8 +22,8 @@ def create_downloaded_folder():
 
 
 
-def convert_to_dict():
-    json_file = open('downloaded/data.json')
+def convert_to_dict(i):
+    json_file = open(f'downloaded/data_{i}.json')
     json_str = json_file.read()
     json_dict_str = json.loads(json_str)
     json_dict = ast.literal_eval(json_dict_str)
@@ -74,14 +75,19 @@ cfg = (
 def spark():
     session = pyspark.sql.SparkSession.builder.config(conf=cfg).getOrCreate()
     s3 = boto3.client('s3')
-    s3.download_file('pinterest-data-b11bee4a-d3cb-4ea3-98a9-4be10f13a673', 'msg_1_data', 'downloaded/data.json')
-    json_dict = convert_to_dict()
-    df = pd.DataFrame(json_dict, index=[0])
+    d = {'json_dict' : []}
+    for i in range(3):
+        s3.download_file('pinterest-data-b11bee4a-d3cb-4ea3-98a9-4be10f13a673', f'msg_{i}_data', f'downloaded/data_{i}.json')
+        d['json_dict'].append(convert_to_dict(i))
+    df = pd.DataFrame.from_dict(d['json_dict'])
     convert_follower_count_to_int64(df)
     convert_category_to_category(df)
     convert_iv_to_category(df)
     df_spark = session.createDataFrame(df)
     df_spark.show()
+    df_spark.write.format('org.apache.spark.sql.cassandra').mode('append').option('spark.cassandra.connection.host', '127.0.0.1:9042') \
+        .option('keyspace', 'data') \
+        .option('table', 'spark_data').save()
 
 create_downloaded_folder()
 spark()

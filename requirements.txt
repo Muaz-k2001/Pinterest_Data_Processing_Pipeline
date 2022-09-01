@@ -3,6 +3,7 @@ fastapi
 kafka
 kafka-python
 pandas
+presto-python-client
 pymysql
 pyspark
 requests

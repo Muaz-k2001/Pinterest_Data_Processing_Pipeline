@@ -76,7 +76,7 @@ def spark():
     session = pyspark.sql.SparkSession.builder.config(conf=cfg).getOrCreate()
     s3 = boto3.client('s3')
     d = {'json_dict' : []}
-    for i in range(3):
+    for i in range(10):
         s3.download_file('pinterest-data-b11bee4a-d3cb-4ea3-98a9-4be10f13a673', f'msg_{i}_data', f'downloaded/data_{i}.json')
         d['json_dict'].append(convert_to_dict(i))
     df = pd.DataFrame.from_dict(d['json_dict'])

@@ -85,7 +85,7 @@ def spark():
     convert_iv_to_category(df)
     df_spark = session.createDataFrame(df)
     df_spark.show()
-    df_spark.write.format('org.apache.spark.sql.cassandra').mode('append').option('spark.cassandra.connection.host', '127.0.0.1:9042') \
+    df_spark.write.format('org.apache.spark.sql.cassandra').mode('append').option('spark.cassandra.connection.host', 'localhost:9042') \
         .option('keyspace', 'data') \
         .option('table', 'spark_data').save()
 

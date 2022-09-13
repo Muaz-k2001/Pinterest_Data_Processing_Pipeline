@@ -36,8 +36,8 @@ def transformations(dataframe, epoch_id):
         dataframe = dataframe.withColumn("value", from_json(dataframe["value"], schema)).select(col("value.*"))
         dataframe.write.format('jdbc') \
                 .mode('append') \
-                .option('url', 'jdbc:postgresql://localhost/spark') \
-                .option('dbtable', 'spark_data') \
+                .option('url', 'jdbc:postgresql://localhost/pinterest_streaming') \
+                .option('dbtable', 'experimental_data') \
                 .option('user', 'postgres') \
                 .option('password', 'mypassword') \
                 .save()
